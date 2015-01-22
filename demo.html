@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!--<script src="http://cdnjscn.b0.upaiyun.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery.qrcode.min.js"></script>
+    <script src="js/imageZoom.js"></script>
+    <link href="css/imageZoom.css"  rel="stylesheet" type="text/css" />
+    <script>
+        $(function () {
+            $('ul li img').imageZoom({});
+            $('#qrcode').qrcode({text:'你说',width:120,height:100,render:'gif'});
+        })
+    </script>
+    <style>
+        ul{
+            list-style: none;
+            margin:0 auto;
+            padding: 0;
+        }
+        ul li{
+            width:130px;
+            text-align: center;
+            float:left;
+        }
+    </style>
+
+</head>
+<body>
+    <!--<ul>-->
+        <!--<li>-->
+            <!--<img src="images/1.png" width="120px" height="120px">-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<img src="images/2.png" width="120px" height="120px">-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<img src="images/3.png" width="120px" height="120px">-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<img src="images/4.png" width="120px" height="120px">-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<img src="images/5.png" width="120px" height="120px">-->
+        <!--</li>-->
+    <!--</ul>-->
+    <div id="qrcode"></div>
+    <!--<div id="over_laryer">-->
+        <!--<div class="arrow arrow_prev"><span></span></div>-->
+        <!--<div class="arrow arrow_next"><span></span></div>-->
+    <!--</div>-->
+</body>
+</html>
