@@ -15,43 +15,57 @@
         var opts = $.extend(defaults, options);
 
         $overlayer = $('<div id="over_laryer"><div class="arrow arrow_prev"><span></span></div><div class="arrow arrow_next"><span></span></div></div>');
-        $image_zoom = $('<div id="image_zoom"><div class="image_zoom_wrapper"><img src="" class="preview"/><span class="close"></span></div> </div>');
-        $('body').append($overlayer).append($image_zoom);
+        //$overlayer = $('<div id="over_laryer"></div>');
+
+        $image_zoom_wrapper = $('<div id="image_zoom"><div class="image_zoom_wrapper"><img src="" class="preview"/><span class="close"></span></div> </div>');
+        $('body').append($overlayer).append($image_zoom_wrapper);
         var image_count = $(this).size();
         var cur_index  = 0;
         var image_list = $(this);
+        var widowWidth = $(window).width() * 0.8;
+        var windowHeight = $(window).height() * 0.8;
+        console.info($(this))
         $(this).each(function(){
-            //console.info(this)
             $(this).css({'cursor':'pointer'});
-            $(this).click(function(){
-                cur_index = image_list.index(this);
-                $image_zoom.show();
-                $overlayer.show()
-                $('#image_zoom img.preview').attr('src',$(this).attr('src'));
-                var widowWidth = $(window).width() * 0.8;
-                var windowHeight = $(window).height() * 0.8;
-                //console.info(widowWidth+"--"+windowHeight)
-                $("#image_zoom img.preview").attr("src",$(this).attr("src")).load(function(){
-                    var realWidth = $(this).width()
-                    var realHeight = $(this).height()
-                    //console.info(realWidth +" == "+ realHeight);
-                    if(realHeight > windowHeight){
-                        var autoHeight = windowHeight;
-                        var autoWidth  = (autoHeight/realHeight)*realWidth;
-                    }
-                    else{
-                        var autoHeight = realHeight;
-                        var autoWidth = realWidth;
-                    }
-                    $(this).css({"width":autoWidth,"height":autoHeight});
-                    $image_zoom.css({"width":autoWidth,"height":autoHeight,"margin-left":-1*autoWidth/2,"margin-top":-1*autoHeight/2});
+            var cur_img = $(this);
+            $('<img />').attr("src",$(cur_img).attr("src")+"?t="+Math.random()).load(function(){
+                console.info('e')
+                var realWidth = this.width;
+                var realHeight = this.height;
 
-                });
-            })
+                var autoWidth = realWidth;
+                var autoHeight = realHeight;
+                //console.info(realWidth +" == "+ realHeight);
+                if(realHeight > windowHeight){
+                    autoHeight = windowHeight;
+                    autoWidth  = (autoHeight/realHeight)*realWidth;
+                }
+                else{
+                    autoHeight = realHeight;
+                    autoWidth = realWidth;
+                }
+                $(cur_img).attr('autoWidth',parseInt(autoWidth)).attr('autoHeight',parseInt(autoHeight));
+                $(cur_img).click(function(){
+                    cur_index = image_list.index(this);
+                    $image_zoom_wrapper.show();
+                    $overlayer.show()
+                    $('#image_zoom img.preview').attr('src',$(this).attr('src'));
+                    var autoWidth = parseInt($(this).attr('autoWidth'));
+                    var autoHeight = parseInt($(this).attr('autoHeight'));
+
+                    $("#image_zoom img.preview").css({"width":autoWidth+'px',"height":autoHeight+'px'});
+                    $image_zoom_wrapper.css({"width":autoWidth+'px',"height":autoHeight+'px',"margin-left":(-1*autoWidth/2)+'px',"margin-top":(-1*autoHeight/2)+'px'});
+
+
+                })
+            });
+
+
+
         });
 
-        $image_zoom.find('span.close').click(function(){
-            $image_zoom.hide();
+        $image_zoom_wrapper.find('span.close').click(function(){
+            $image_zoom_wrapper.hide();
             $overlayer.hide()
         });
 
@@ -69,13 +83,19 @@
             image_list.eq(cur_index).trigger('click');
         }
         $('body').bind('mousewheel', function(event, delta) {
-            event = event || window.event;
-            event.wheelDelta > 0 ? showNextImage(-1) :showNextImage(1);
+            if($image_zoom_wrapper.is(':visible')){
+                event = event || window.event;
+                event.wheelDelta > 0 ? showNextImage(-1) :showNextImage(1);
+            }
+
             return false;
         });
         document.body.addEventListener("DOMMouseScroll", function(event) {
-            event = event || window.event;
-            event.detail > 0 ? showNextImage(1) :showNextImage(-1);
+            if($image_zoom_wrapper.is(':visible')){
+                event = event || window.event;
+                event.detail > 0 ? showNextImage(1) :showNextImage(-1);
+            }
+
         });
 
     };
